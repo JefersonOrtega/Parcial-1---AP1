@@ -96,6 +96,17 @@ namespace Parcial1_AP1.UI.Registros
                 MyerrorProvider.SetError(PerdidotextBox, "No se puede dejar este campo vacio");
                 paso = false;
             }
+            if (Convert.ToSingle(ValortextBox.Text) < 0)
+            {
+                MyerrorProvider.SetError(ValortextBox, "Este campo no puede contener valores negativos");
+                paso = false;
+            }
+            if (Convert.ToSingle(LogradotextBox.Text) < 0)
+            {
+                MyerrorProvider.SetError(LogradotextBox, "Este campo no puede contener valores negativos");
+                paso = false;
+            }
+
             return paso;
         }
         private void Guardarbutton_Click(object sender, EventArgs e)
@@ -140,9 +151,12 @@ namespace Parcial1_AP1.UI.Registros
 
             int.TryParse(IDEvaluacionnumericUpDown.Text, out id);
             Limpiar();
-            if (EvaluacionBLL.Eliminar(id))
+
+            if (EvaluacionBLL.Buscar(id)!=null)
             {
-                MessageBox.Show("ELiminado", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (EvaluacionBLL.Eliminar(id))
+                    MessageBox.Show("ELiminado", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
             }
             else
             {
@@ -161,7 +175,6 @@ namespace Parcial1_AP1.UI.Registros
 
             if (evaluacion != null)
             {
-                MessageBox.Show("Encontrado");
                 LlenarCampos(evaluacion);
             }
             else
@@ -186,17 +199,21 @@ namespace Parcial1_AP1.UI.Registros
 
             PerdidotextBox.Text = Convert.ToString(perdido);
 
-            if ((perdido * 31 / 10) < 25)
+            float porciento = logrado / valor * 100;
+            float porcentaje = 100 - porciento;
+
+
+            if (porcentaje < 25)
             {
                 PronosticocomboBox.SelectedIndex = 0;
             }
             else
             {
-                if (((perdido * 31 / 10) >= 25) & ((perdido * 31 / 10) <= 25))
+                if ((porcentaje >= 25) && (porcentaje <= 30))
                     PronosticocomboBox.SelectedIndex = 1;
                 else
                 {
-                    if ((perdido * 31 / 10) > 25)
+                    if (porcentaje > 25)
                     {
                         PronosticocomboBox.SelectedIndex = 2;
                     }
@@ -222,17 +239,21 @@ namespace Parcial1_AP1.UI.Registros
 
             PerdidotextBox.Text = Convert.ToString(perdido);
 
-            if((perdido * 31 / 10) < 25)
+            float porciento = logrado / valor * 100;
+            float porcentaje = 100 - porciento;
+
+
+            if (porcentaje < 25)
             {
                 PronosticocomboBox.SelectedIndex = 0;
             }
             else
             {
-                if (((perdido * 31 / 10) >= 25) & ((perdido * 31 / 10) <= 25))
+                if ((porcentaje >= 25) && (porcentaje <= 30))
                     PronosticocomboBox.SelectedIndex = 1;
                 else
                 {
-                    if ((perdido * 31 / 10) > 25)
+                    if (porcentaje > 25)
                     {
                         PronosticocomboBox.SelectedIndex = 2;
                     }

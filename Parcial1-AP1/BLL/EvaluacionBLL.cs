@@ -10,14 +10,17 @@ using System.Threading.Tasks;
 
 namespace Parcial1_AP1.BLL
 {
-    class EvaluacionBLL
+    public class EvaluacionBLL
     {
         /// <summary>
         /// Metodo para calcular los puntos perdidos
         /// </summary>
         public static float CalcularPerdido(float valor, float logrado)
         {
-            return (valor - logrado);
+            if (valor >= logrado)
+                return (valor - logrado);
+            else
+                return 0;
         }
 
         public static bool Guardar(Evaluacion evaluacion)
@@ -29,6 +32,7 @@ namespace Parcial1_AP1.BLL
             {
                 if (db.Evaluacion.Add(evaluacion) != null)
                 {
+                    evaluacion.perdido = EvaluacionBLL.CalcularPerdido(evaluacion.valor, evaluacion.logrado);
                     paso = db.SaveChanges() > 0;
                 }
             }
@@ -72,7 +76,7 @@ namespace Parcial1_AP1.BLL
             {
                 var eliminar = db.Evaluacion.Find(id);
                 db.Entry(eliminar).State = EntityState.Deleted;
-                paso = db.SaveChanges() > 0;
+                paso = (db.SaveChanges() > 0);
             }
             catch (Exception)
             {
